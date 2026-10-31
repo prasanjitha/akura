@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+.sites-runtime/
+.env*
+*.tsbuildinfo
+.DS_Store
+
+# Separate local project, not part of the font converter.
+/us-voice-over/
