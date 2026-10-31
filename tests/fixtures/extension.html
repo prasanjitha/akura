@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Akura extension smoke test</title>
+<style>body{max-width:760px;margin:60px auto;padding:24px;font:18px/1.8 Arial;background:#fafafa;color:#25272b}button,input,textarea{font:inherit}button{margin:4px;padding:8px 12px}p{white-space:pre-line}textarea{width:100%;height:120px}section{margin:24px 0;padding:20px;background:white;border:1px solid #ddd;border-radius:12px}label{display:block}#copied{white-space:pre-wrap;font:16px monospace}</style>
+</head><body>
+<h1>Akura extension smoke test</h1><p>Local harness — storage API mocked; content and clipboard scripts are the packaged extension files.</p>
+<label><input id="enabled" type="checkbox" checked> Enable selection button</label>
+<label><input id="lines" type="checkbox"> Remove line space</label>
+<label><input id="fail-copy" type="checkbox"> Simulate clipboard failure</label>
+<button id="select">Select Sinhala example</button><button id="english">Select English only</button>
+<section><p id="example">ශ්‍රී ලංකා.
+
+සිංහල.</p><p id="english-text">Hello world.</p></section>
+<label>Editable input<textarea id="input">සිංහල.
+
+ශ්‍රී ලංකා.</textarea></label>
+<button id="select-input">Select input text</button>
+<label>Password input<input id="password" type="password" value="සිංහල"></label>
+<button id="select-password">Select password</button>
+<section contenteditable="true" aria-label="Editable paragraph">ශ්‍රී ලංකා.</section>
+<label>Paste result here<textarea id="paste" placeholder="Paste copied legacy text here"></textarea></label>
+<p>Last copy request (test audit): <output id="copied"></output></p>
+<script>
+const listeners = [];
+const settings = { enabled: true, removeLineSpace: false };
+window.chrome = { storage: { local: { get: async defaults => ({ ...defaults, ...settings }) }, onChanged: { addListener: fn => listeners.push(fn) } } };
+for (const [id, key] of [['enabled', 'enabled'], ['lines', 'removeLineSpace']]) {
+  document.getElementById(id).onchange = event => {
+    settings[key] = event.target.checked;
+    listeners.forEach(fn => fn({ [key]: { newValue: settings[key] } }, 'local'));
+  };
+}
+function select(id) {
+  const range = document.createRange(); range.selectNodeContents(document.getElementById(id));
+  const selection = getSelection(); selection.removeAllRanges(); selection.addRange(range);
+}
+document.getElementById('select').onclick = () => select('example');
+document.getElementById('english').onclick = () => select('english-text');
+document.getElementById('select-input').onclick = () => document.getElementById('input').select();
+document.getElementById('select-password').onclick = () => document.getElementById('password').select();
+</script>
+<script src="../../extension/converter.js"></script><script src="../../extension/clipboard.js"></script>
+<script>
+const realCopy = AkuraClipboard.write;
+AkuraClipboard.write = async text => {
+  document.getElementById('copied').textContent = text;
+  if (document.getElementById('fail-copy').checked) throw new Error('Simulated copy failure');
+  return realCopy(text);
+};
+</script>
+<script src="../../extension/content.js"></script>
+</body></html>

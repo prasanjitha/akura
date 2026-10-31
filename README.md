@@ -26,3 +26,12 @@ A plain textarea or plain-text paste cannot carry multiple fonts. In apps that d
 The conversion library is [Open-SL/sinhala-unicode-converter](https://github.com/Open-SL/sinhala-unicode-converter), package `sinhala-unicode-coverter` (MIT), based on UCSC Language Technology Research Laboratory conversion rules. The wrapper normalizes Unicode and repairs several mappings. All conversion happens locally without transmitting the text.
 
 An optional WebMCP `convert_sinhala_text` tool shares the UI's converter and input state in supported browsers.
+
+## Chrome extension
+
+The `extension/` folder contains **Akura — Sinhala Legacy Copy**. Highlight Sinhala
+text on a webpage, click **Copy legacy**, and paste using FMBasuru. It includes
+an enable switch and a Remove line space setting. See [installation and usage](extension/README.md).
+
+Run `npm run build:extension` after changing the shared converter. Run
+`npm run package:extension` to create `dist/akura-extension.zip`.

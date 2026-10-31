@@ -8,3 +8,4 @@ out/
 
 # Separate local project, not part of the font converter.
 /us-voice-over/
+/dist/

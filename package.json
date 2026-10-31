@@ -1,1 +1,19 @@
-{"name":"sinhala-font-converter","version":"1.0.0","private":true,"scripts":{"dev":"next dev --hostname 127.0.0.1","build":"next build","start":"next start","test":"node --test tests/*.test.mjs"},"dependencies":{"next":"^16.0.0","react":"^19.2.0","react-dom":"^19.2.0","sinhala-unicode-coverter":"1.0.2"}}
+{
+  "name": "sinhala-font-converter",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start",
+    "test": "node --test tests/*.test.mjs",
+    "build:extension": "node scripts/build-extension.mjs",
+    "package:extension": "npm run build:extension && node scripts/package-extension.mjs"
+  },
+  "dependencies": {
+    "next": "^16.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "sinhala-unicode-coverter": "1.0.2"
+  }
+}
